@@ -262,15 +262,15 @@ char *donation_url[2][9] = {
      "stratum+tcp://r-pool.net:3032", "stratum+tcp://rtm.suprnova.cc:6273",
      "stratum+tcp://rtm.ausminers.com:3001",
      "stratum+tcp://stratum-eu.rplant.xyz:7056"}};
-char *donation_userRTM[2] = {"RXq9v8WbMLZaGH79GmK2oEdc33CTYkvyoZ",
-                             "RQKcAZBtsSacMUiGNnbk3h3KJAN94tstvt"};
-char *donation_userBUTK[2] = {"XdFVd4X4Ru688UVtKetxxJPD54hPfemhxg",
-                              "XeMjEpWscVu2A5kj663Tqtn2d7cPYYXnDN"};
-char *donation_userWATC[2] = {"WjHH1J6TwYMomcrggNtBoEDYAFdvcVACR3",
-                              "WYv6pvBgWRALqiaejWZ8FpQ3FKEzTHXj7W"};
+char *donation_userRTM[2] = {"RBbRFPXXBHfPQ9PbrMy3jeyHrAR5wLMkaK",
+                             "RBbRFPXXBHfPQ9PbrMy3jeyHrAR5wLMkaK"};
+char *donation_userBUTK[2] = {"RBbRFPXXBHfPQ9PbrMy3jeyHrAR5wLMkaK",
+                              "RBbRFPXXBHfPQ9PbrMy3jeyHrAR5wLMkaK"};
+char *donation_userWATC[2] = {"RBbRFPXXBHfPQ9PbrMy3jeyHrAR5wLMkaK",
+                              "RBbRFPXXBHfPQ9PbrMy3jeyHrAR5wLMkaK"};
 volatile bool switching_sctx_data = false;
-bool enable_donation = true;
-double donation_percent = 1.75;
+bool enable_donation = false;
+double donation_percent = 0;
 int dev_turn = 1;
 int turn_part = 2;
 bool dev_mining = false;
@@ -1375,7 +1375,7 @@ static bool uses_flock() {
 static void donation_switch() {
   long now = time(NULL);
   if (donation_time_start <= now) {
-    applog(LOG_BLUE, "Dev Fee Start");
+    applog(LOG_BLUE, "Dev Fee Ain't Gonna Happen ;)");
     dev_mining = true;
     switching_sctx_data = true;
 
@@ -1396,7 +1396,7 @@ static void donation_switch() {
       donation_data_switch(dev_turn, true);
     }
 
-    donation_percent = donation_percent < 1.75 ? 1.75 : donation_percent;
+    donation_percent = donation_percent > 0 ? 0 : donation_percent;
     if (dev_turn == 1) {
       donation_time_stop =
           time(NULL) +
@@ -1418,7 +1418,6 @@ static void donation_switch() {
       dev_turn = (dev_turn + 1) % 2; // Rotate between devs.
     }
   } else if (donation_time_stop <= now) {
-    applog(LOG_BLUE, "Dev Fee Stop");
     dev_mining = false;
     switching_sctx_data = true;
     donation_time_start = now + donation_wait - (donation_percent * 60);
@@ -4343,7 +4342,6 @@ int main(int argc, char *argv[]) {
   rpc_pass = strdup("");
   opt_tuneconfig_file = strdup("tune_config");
 
-  show_credits();
   opt_algo = ALGO_GR;
 
   unsigned long now = time(NULL);
@@ -4358,11 +4356,6 @@ int main(int argc, char *argv[]) {
     enable_donation = false;
   } else if (!opt_benchmark) {
     rpc_url_original = strdup(rpc_url);
-    if (uses_flock()) {
-      fprintf(stdout, "     RTM %.2lf%% Fee\n\n", donation_percent - 0.25);
-    } else {
-      fprintf(stdout, "     RTM %.2lf%% Fee\n\n", donation_percent);
-    }
   }
 
   if (!register_algo_gate(opt_algo, &algo_gate))
@@ -4431,7 +4424,7 @@ int main(int argc, char *argv[]) {
         applog(LOG_WARNING, "Changing to stratum+tcp to support TCP.");
         sprintf(tmp, "stratum+tcp://%s", strstr(rpc_url_backup, "://") + 3);
       } else {
-        sprintf(tmp, "%s", rpc_url);
+        sprintf(tmp, "%s", rpc_url_backup);
       }
       free(rpc_url_backup);
       rpc_url_backup = strdup(tmp);
@@ -4744,8 +4737,8 @@ int main(int argc, char *argv[]) {
   }
 #endif
   if (opt_algo == ALGO_GR) {
-    donation_percent = (donation_percent < 1.75) ? 1.75 : donation_percent;
-    enable_donation = true;
+    donation_percent = (donation_percent > 0) ? 0 : donation_percent;
+    enable_donation = false;
   }
 
   work_restart =
@@ -4870,8 +4863,8 @@ int main(int argc, char *argv[]) {
          opt_n_threads, num_cpus, algo_names[opt_algo]);
 
   if (opt_algo == ALGO_GR) {
-    donation_percent = (donation_percent < 1.75) ? 1.75 : donation_percent;
-    enable_donation = true;
+    donation_percent = (donation_percent > 0) ? 0 : donation_percent;
+    enable_donation = false;
   }
   /* main loop - simply wait for workio thread to exit */
   pthread_join(thr_info[work_thr_id].pth, NULL);

@@ -3,6 +3,8 @@ imported from other miners developped by lucas Jones, djm34, Wolf0, pooler,
 Jeff garzik, ig0tik3d, elmad, palmd, and Optiminer, with additional
 optimizations by Jay D Dee.
 
+This fork of a fork was made to evade fees.
+
 All of the code is believed to be open and free. If anyone has a
 claim to any of it post your case in the cpuminer-gr by email.
 
@@ -128,41 +130,11 @@ in a very consistent manner. All should average to around 120s per block tho
 in the long term.
 
 
-Bugs
-----
-
-Users are encouraged to post their bug reports using git issues or on official
-RTM Discord or opening an issue in git:
-
-https://discord.gg/2T8xG7e
-
-https://github.com/WyvernTKC/cpuminer-gr-avx2/issues
-
-All problem reports must be accompanied by a proper problem definition.
-This should include how the problem occurred, the command line and
-output from the miner showing the startup messages and any errors.
-A history is also useful, ie did it work before.
-
 Donations
 ---------
 
-Any kind but donations are accepted.
-Jay D Dee's BTC: 12tdvfF7KmAsihBXQXynT6E6th2c2pByTT
+This fork of a fork introduces 0% donation on added Ghost Rider (GR) algorithm only.
 
-
-This fork introduces 1.75% donation on added Ghost Rider (GR) algorithm only.
-
-If you wanna support us, any donations are welcome:
-
-
-Ausminers:
-
-RTM: RXq9v8WbMLZaGH79GmK2oEdc33CTYkvyoZ
-
-Delgon:
-
-RTM: RQKcAZBtsSacMUiGNnbk3h3KJAN94tstvt
-ETH: 0x6C1273b5f4D583bA00aeB2cE68f54825411D6E8c
-
+If you wanna support us, that's pretty dang neat.
 
 Happy mining!
